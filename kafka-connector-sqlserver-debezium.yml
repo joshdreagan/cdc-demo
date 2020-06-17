@@ -1,0 +1,19 @@
+apiVersion: kafka.strimzi.io/v1alpha1
+kind: KafkaConnector
+metadata:
+  name: sqlserver-debezium-connector
+  labels:
+    strimzi.io/cluster: my-connect-cluster
+spec:
+  class: io.debezium.connector.sqlserver.SqlServerConnector
+  tasksMax: 1
+  config:
+    database.hostname: "server.earth.svc"
+    database.port: "1433"
+    database.user: "sa"
+    database.password: "Password!"
+    database.dbname: "InternationalDB"
+    database.server.name: "mssql-server-linux"
+    table.whitelist: "dbo.Orders"
+    database.history.kafka.bootstrap.servers: "my-cluster-kafka-bootstrap:9092"
+    database.history.kafka.topic: "dbhistory.internationaldb"

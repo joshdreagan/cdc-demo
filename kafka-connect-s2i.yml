@@ -1,0 +1,10 @@
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaConnectS2I
+metadata:
+  name: my-connect-cluster
+  annotations:
+    strimzi.io/use-connector-resources: "true"
+spec:
+  version: 2.4.0
+  replicas: 1
+  bootstrapServers: my-cluster-kafka-bootstrap:9092

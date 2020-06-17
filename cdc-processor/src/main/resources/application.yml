@@ -1,0 +1,32 @@
+# Servlet Container & Health Setup
+server:
+  address: 0.0.0.0
+management:
+  endpoints:
+    enabled: false
+    health:
+      enabled: true
+
+# Spring Boot
+spring:
+  datasource:
+    type: org.apache.commons.dbcp2.BasicDataSource
+    url: jdbc:postgresql://localhost:5432/sampledb
+    username: user1
+    password: Abcd1234!
+
+# Camel Spring Boot
+camel:
+  springboot:
+    name: cdc-processor
+  component:
+    kafka.configuration:
+      brokers: "localhost:9092"
+      group-id: cdc-processor
+      auto-offset-reset: earliest
+
+# Logging
+logging:
+  config: classpath:logback.xml
+  level:
+    com.redhat.examples: INFO

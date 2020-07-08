@@ -33,6 +33,8 @@ oc exec $(oc get pods -n moon -l 'app=postgresql' -o jsonpath='{.items[0].metada
 ```
 oc new-project streams
 
+# Make sure to install the AMQ Streams Operator.
+
 oc apply -f kafka-cluster.yml -n streams
 
 export DEBEZIUM_VERSION=1.1.2.Final

@@ -8,4 +8,4 @@ data:
     camel:
       component:
         kafka.configuration:
-          brokers: "my-cluster-kafka-bootstrap:9092"
+          brokers: "my-cluster-kafka-bootstrap.streams.svc:9092"

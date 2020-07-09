@@ -50,8 +50,8 @@ oc apply -f kafka-connector-sqlserver-debezium.yml -n streams
 ## Build/deploy the Fuse CDC Processor App
 
 ```
-pushd cdc-processor
-oc project streams
+pushd postgresql-cdc-processor
+oc new-project camel
 mvn -P openshift clean package fabric8:deploy
 popd
 ```
@@ -91,3 +91,7 @@ oc run -n moon postgresql-client -ti --image=registry.redhat.io/rhel8/postgresql
 ```
 select * from Orders;
 ```
+
+## Camel K (optional)
+
+If you want to run a Camel K app which syncs an AWS DynamoDB table, `cd` into the 'dynamodb-cdc-processor' directory and folow [these instructions](./dynamodb-cdc-processor/README.md).

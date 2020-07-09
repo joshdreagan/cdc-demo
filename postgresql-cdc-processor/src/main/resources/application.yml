@@ -18,11 +18,11 @@ spring:
 # Camel Spring Boot
 camel:
   springboot:
-    name: cdc-processor
+    name: postgresql-cdc-processor
   component:
     kafka.configuration:
       brokers: "localhost:9092"
-      group-id: cdc-processor
+      group-id: postgresql-cdc-processor
       auto-offset-reset: earliest
 
 # Logging

@@ -35,59 +35,59 @@ public class DynamoDbCdcProcessor extends RouteBuilder {
       .setHeader("DebeziumOperation").groovy("request.body.payload?.op")
       .routingSlip().simple("direct:${header.DebeziumOperation}")
     ;
-    
+
     from("direct:c")
     .transform().groovy("request.body.payload?.after")
     .setHeader("CamelAwsDdbItem").groovy(
-        "import com.amazonaws.services.dynamodbv2.model.AttributeValue;\n" +
+        "import software.amazon.awssdk.services.dynamodb.model.AttributeValue;\n" +
         "var map = [:];\n" +
-        "map['OrderId'] = new AttributeValue().withN(request.body?.OrderId as String);\n" +
-        "map['OrderType'] = new AttributeValue().withS(request.body?.OrderType);\n" +
-        "map['OrderItemName'] = new AttributeValue().withS(request.body?.OrderItemName);\n" +
-        "map['Quantity'] = new AttributeValue().withN(request.body?.Quantity as String);\n" +
-        "map['Price'] = new AttributeValue().withS(request.body?.Price);\n" +
-        "map['ShipmentAddress'] = new AttributeValue().withS(request.body?.ShipmentAddress);\n" +
-        "map['ZipCode'] = new AttributeValue(request.body?.ZipCode);\n" +
-        "map['OrderUser'] = new AttributeValue(request.body?.OrderUser);\n" +
+        "map['OrderId'] = AttributeValue.builder().n(request.body?.OrderId as String).build();\n" +
+        "map['OrderType'] = AttributeValue.builder().s(request.body?.OrderType).build();\n" +
+        "map['OrderItemName'] = AttributeValue.builder().s(request.body?.OrderItemName).build();\n" +
+        "map['Quantity'] = AttributeValue.builder().n(request.body?.Quantity as String).build();\n" +
+        "map['Price'] = AttributeValue.builder().s(request.body?.Price).build();\n" +
+        "map['ShipmentAddress'] = AttributeValue.builder().s(request.body?.ShipmentAddress).build();\n" +
+        "map['ZipCode'] = AttributeValue.builder().s(request.body?.ZipCode).build();\n" +
+        "map['OrderUser'] = AttributeValue.builder().s(request.body?.OrderUser).build();\n" +
         "return map;"
       )
-      .to("aws-ddb:Orders?operation=PutItem")
+      .to("aws2-ddb:Orders?operation=PutItem")
     ;
-    
+
     from("direct:u")
       .transform().groovy("request.body.payload?.after")
       .setHeader("CamelAwsDdbKey").groovy(
-        "import com.amazonaws.services.dynamodbv2.model.AttributeValue;\n" +
+        "import software.amazon.awssdk.services.dynamodb.model.AttributeValue;\n" +
         "var map = [:];\n" +
-        "map['OrderId'] = new AttributeValue().withN(request.body?.OrderId as String);\n" +
+        "map['OrderId'] = AttributeValue.builder().n(request.body?.OrderId as String).build();\n" +
         "return map;"
       )
       .setHeader("CamelAwsDdbUpdateValues").groovy(
-        "import com.amazonaws.services.dynamodbv2.model.AttributeAction;\n" +
-        "import com.amazonaws.services.dynamodbv2.model.AttributeValue;\n" +
-        "import com.amazonaws.services.dynamodbv2.model.AttributeValueUpdate;\n" +
+        "import software.amazon.awssdk.services.dynamodb.model.AttributeAction;\n" +
+        "import software.amazon.awssdk.services.dynamodb.model.AttributeValue;\n" +
+        "import software.amazon.awssdk.services.dynamodb.model.AttributeValueUpdate;\n" +
         "var map = [:];\n" +
-        "map['OrderType'] = new AttributeValueUpdate(new AttributeValue().withS(request.body?.OrderType), AttributeAction.PUT);\n" +
-        "map['OrderItemName'] = new AttributeValueUpdate(new AttributeValue().withS(request.body?.OrderItemName), AttributeAction.PUT);\n" +
-        "map['Quantity'] = new AttributeValueUpdate(new AttributeValue().withN(request.body?.Quantity as String), AttributeAction.PUT);\n" +
-        "map['Price'] = new AttributeValueUpdate(new AttributeValue().withS(request.body?.Price), AttributeAction.PUT);\n" +
-        "map['ShipmentAddress'] = new AttributeValueUpdate(new AttributeValue().withS(request.body?.ShipmentAddress), AttributeAction.PUT);\n" +
-        "map['ZipCode'] = new AttributeValueUpdate(new AttributeValue(request.body?.ZipCode), AttributeAction.PUT);\n" +
-        "map['OrderUser'] = new AttributeValueUpdate(new AttributeValue(request.body?.OrderUser), AttributeAction.PUT);\n" +
+        "map['OrderType'] = AttributeValueUpdate.builder().value(AttributeValue.builder().s(request.body?.OrderType).build()).action(AttributeAction.PUT).build();\n" +
+        "map['OrderItemName'] = AttributeValueUpdate.builder().value(AttributeValue.builder().s(request.body?.OrderItemName).build()).action(AttributeAction.PUT).build();\n" +
+        "map['Quantity'] = AttributeValueUpdate.builder().value(AttributeValue.builder().n(request.body?.Quantity as String).build()).action(AttributeAction.PUT).build();\n" +
+        "map['Price'] = AttributeValueUpdate.builder().value(AttributeValue.builder().s(request.body?.Price).build()).action(AttributeAction.PUT).build();\n" +
+        "map['ShipmentAddress'] = AttributeValueUpdate.builder().value(AttributeValue.builder().s(request.body?.ShipmentAddress).build()).action(AttributeAction.PUT).build();\n" +
+        "map['ZipCode'] = AttributeValueUpdate.builder().value(AttributeValue.builder().s(request.body?.ZipCode).build()).action(AttributeAction.PUT).build();\n" +
+        "map['OrderUser'] = AttributeValueUpdate.builder().value(AttributeValue.builder().s(request.body?.OrderUser).build()).action(AttributeAction.PUT).build();\n" +
         "return map;"
       )
-      .to("aws-ddb:Orders?operation=UpdateItem")
+      .to("aws2-ddb:Orders?operation=UpdateItem")
     ;
-    
+
     from("direct:d")
       .transform().groovy("request.body.payload?.before")
       .setHeader("CamelAwsDdbKey").groovy(
-        "import com.amazonaws.services.dynamodbv2.model.AttributeValue;\n" +
+        "import software.amazon.awssdk.services.dynamodb.model.AttributeValue;\n" +
         "var map = [:];\n" +
-        "map['OrderId'] = new AttributeValue().withN(request.body?.OrderId as String);\n" +
+        "map['OrderId'] = AttributeValue.builder().n(request.body?.OrderId as String).build();\n" +
         "return map;"
       )
-      .to("aws-ddb:{{dynamodb.tableName}}?operation=DeleteItem")
+      .to("aws2-ddb:{{dynamodb.tableName}}?operation=DeleteItem")
     ;
   }
 }

@@ -9,10 +9,10 @@ oc adm policy add-scc-to-user anyuid -z default -n earth #This command must be r
 
 oc apply -f earth-data-sql.yml -n earth
 oc new-app mcr.microsoft.com/mssql/server:2017-CU9-ubuntu -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password!' -e 'MSSQL_PID=Standard' -e 'MSSQL_AGENT_ENABLED=true' -n earth
-oc set volume dc/server --add --name=earth-data --claim-size 10G --mount-path=/var/opt/mssql -n earth
-oc set volume dc/server --add --name=earth-data-sql --type=configmap --mount-path=/opt/workshop --configmap-name=earth-data-sql -n earth
+oc set volume deployment/server --add --name=earth-data --claim-size 10G --mount-path=/var/opt/mssql -n earth
+oc set volume deployment/server --add --name=earth-data-sql --type=configmap --mount-path=/opt/workshop --configmap-name=earth-data-sql -n earth
 
-oc exec $(oc get pods -n earth -l 'app=server' -o jsonpath='{.items[0].metadata.name}') -n earth -- /opt/mssql-tools/bin/sqlcmd -S server.earth.svc -U sa -P 'Password!' -i /opt/workshop/earth-data.sql
+oc exec $(oc get pods -n earth -l 'deployment=server' -o jsonpath='{.items[0].metadata.name}') -n earth -- /opt/mssql-tools/bin/sqlcmd -S server.earth.svc -U sa -P 'Password!' -i /opt/workshop/earth-data.sql
 ```
 
 ## Setup the PostgreSQL DB
@@ -22,10 +22,10 @@ oc new-project moon
 
 oc apply -f moon-data-sql.yml -n moon
 oc new-app postgresql:10 -e 'POSTGRESQL_USER=user1' -e 'POSTGRESQL_PASSWORD=Abcd1234!' -e 'POSTGRESQL_ADMIN_PASSWORD=Abcd1234!' -e 'POSTGRESQL_DATABASE=sampledb' -n moon
-oc set volume dc/postgresql --add --name=moon-data --claim-size 10G --mount-path=/var/lib/pgsql/data -n moon
-oc set volume dc/postgresql --add --name=moon-data-sql --type=configmap --mount-path=/opt/workshop --configmap-name=moon-data-sql -n moon
+oc set volume deployment/postgresql --add --name=moon-data --claim-size 10G --mount-path=/var/lib/pgsql/data -n moon
+oc set volume deployment/postgresql --add --name=moon-data-sql --type=configmap --mount-path=/opt/workshop --configmap-name=moon-data-sql -n moon
 
-oc exec $(oc get pods -n moon -l 'app=postgresql' -o jsonpath='{.items[0].metadata.name}') -n moon -- /usr/bin/env PGPASSWORD='Abcd1234!' psql -dsampledb -hpostgresql.moon.svc -Uuser1 -f/opt/workshop/moon-data.sql
+oc exec $(oc get pods -n moon -l 'deployment=postgresql' -o jsonpath='{.items[0].metadata.name}') -n moon -- /usr/bin/env PGPASSWORD='Abcd1234!' psql -dsampledb -hpostgresql.moon.svc -Uuser1 -f/opt/workshop/moon-data.sql
 ```
 
 ## Setup the Kafka cluster

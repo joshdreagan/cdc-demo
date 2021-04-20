@@ -59,7 +59,7 @@ popd
 ## Monitor the CDC topic (optional)
 
 ```
-oc run -n streams kafka-consumer -ti --image=registry.redhat.io/amq7/amq-streams-kafka-25-rhel7:1.5.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic mssql-server-linux.dbo.Orders --from-beginning
+oc run -n streams kafka-consumer -ti --image=registry.redhat.io/amq7/amq-streams-kafka-27-rhel7:1.7.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic mssql-server-linux.dbo.Orders --from-beginning
 ```
 
 ## Make some changes to the MS SQL Server DB

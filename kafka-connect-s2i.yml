@@ -5,7 +5,7 @@ metadata:
   annotations:
     strimzi.io/use-connector-resources: "true"
 spec:
-  version: 2.5.0
+  version: 2.7.0
   replicas: 1
   bootstrapServers: my-cluster-kafka-bootstrap:9092
   config:
@@ -13,4 +13,3 @@ spec:
     offset.storage.topic: connect-cluster-offsets
     config.storage.topic: connect-cluster-configs
     status.storage.topic: connect-cluster-status
-

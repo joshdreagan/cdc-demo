@@ -37,13 +37,7 @@ oc new-project streams
 
 oc apply -f kafka-cluster.yml -n streams
 
-export DEBEZIUM_VERSION=1.2.4.Final
-curl -X GET -o debezium-connector-sqlserver.tar.gz https://repo1.maven.org/maven2/io/debezium/debezium-connector-sqlserver/$DEBEZIUM_VERSION/debezium-connector-sqlserver-$DEBEZIUM_VERSION-plugin.tar.gz
-mkdir kafka-connect-s2i
-tar -C kafka-connect-s2i -xf debezium-connector-sqlserver.tar.gz
-
-oc apply -f kafka-connect-s2i.yml -n streams
-oc start-build my-connect-cluster-connect --from-dir ./kafka-connect-s2i -n streams
+oc apply -f kafka-connect.yml -n streams
 oc apply -f kafka-connector-sqlserver-debezium.yml -n streams
 ```
 

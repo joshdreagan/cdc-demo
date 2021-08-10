@@ -20,8 +20,8 @@
 
     <fabric8-maven-plugin.version>4.3.1</fabric8-maven-plugin.version>
 
-    <fuse.version>7.7.0.fuse-sb2-770010-redhat-00001</fuse.version>
-    <kafka-clients.version>2.5.0</kafka-clients.version>
+    <fuse.version>7.8.0.fuse-sb2-780048-redhat-00001</fuse.version>
+    <kafka-clients.version>2.7.0.redhat-00013</kafka-clients.version>
     <postgres.version>42.2.14</postgres.version>
   </properties>
 

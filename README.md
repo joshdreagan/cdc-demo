@@ -46,14 +46,14 @@ oc apply -f kafka-connector-sqlserver-debezium.yml -n streams
 ```
 pushd postgresql-cdc-processor
 oc new-project camel
-mvn -P openshift clean package fabric8:deploy
+mvn -P openshift clean package oc:deploy
 popd
 ```
 
 ## Monitor the CDC topic (optional)
 
 ```
-oc run -n streams kafka-consumer -ti --image=registry.redhat.io/amq7/amq-streams-kafka-27-rhel7:1.7.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic mssql-server-linux.dbo.Orders --from-beginning
+oc run -n streams kafka-consumer -ti --image=registry.redhat.io/amq7/amq-streams-kafka-30-rhel8:2.0.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic mssql-server-linux.dbo.Orders --from-beginning
 ```
 
 ## Make some changes to the MS SQL Server DB

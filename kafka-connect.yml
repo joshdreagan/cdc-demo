@@ -5,7 +5,7 @@ metadata:
   annotations:
     strimzi.io/use-connector-resources: "true"
 spec:
-  version: 2.7.0
+  version: 3.0.0
   replicas: 2
   bootstrapServers: my-cluster-kafka-bootstrap:9092
   build:
@@ -13,11 +13,14 @@ spec:
       type: docker
       image: "image-registry.openshift-image-registry.svc:5000/streams/kafka-connect-build:latest"
     plugins:
-      - name: debezium-sqlserver-connector
+      - name: debezium-connector-sqlserver
         artifacts:
-          - type: tgz
-            url: https://repo1.maven.org/maven2/io/debezium/debezium-connector-sqlserver/1.4.2.Final/debezium-connector-sqlserver-1.4.2.Final-plugin.tar.gz
-            sha512sum: 82542ed190ec0b7245d0e6554dacec1bb1c65dd3e14e837cdc5898a789482b54af9736d719a9ff50731e61dd9b6a0e741c3ba6f71993e38416dde2753d74f460
+          - type: zip
+            url: "https://maven.repository.redhat.com/ga/io/debezium/debezium-connector-sqlserver/1.7.2.Final-redhat-00003/debezium-connector-sqlserver-1.7.2.Final-redhat-00003-plugin.zip"
+          - type: zip
+            url: "https://maven.repository.redhat.com/ga/io/apicurio/apicurio-registry-distro-connect-converter/2.0.2.Final-redhat-00001/apicurio-registry-distro-connect-converter-2.0.2.Final-redhat-00001.zip"
+          - type: zip
+            url: "https://maven.repository.redhat.com/ga/io/debezium/debezium-scripting/1.7.2.Final-redhat-00003/debezium-scripting-1.7.2.Final-redhat-00003.zip"
   config:
     group.id: connect-cluster
     offset.storage.topic: connect-cluster-offsets

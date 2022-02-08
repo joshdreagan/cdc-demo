@@ -20,7 +20,7 @@ Run the Camel K application. _Note: Append `--dev` to the end of the command if 
 ```
 kamel run \
 --namespace camel-k \
---configmap dynamodb-cdc-processor-configmap \
---secret dynamodb-cdc-processor-secret \
+--config configmap:dynamodb-cdc-processor-configmap \
+--config secret:dynamodb-cdc-processor-secret \
 ./DynamoDbCdcProcessor.java
 ```

@@ -18,11 +18,12 @@
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
 
-    <openshift-maven-plugin.version>1.6.0</openshift-maven-plugin.version>
+    <openshift-maven-plugin.version>1.8.0</openshift-maven-plugin.version>
 
-    <fuse.version>7.10.0.fuse-sb2-7_10_0-00019-redhat-00002</fuse.version>
-    <kafka-clients.version>3.0.0.redhat-00005</kafka-clients.version>
-    <postgres.version>42.2.14</postgres.version>
+    <spring-boot.version>2.7.1</spring-boot.version>
+    <camel.version>3.14.2.redhat-00054</camel.version>
+    <kafka-clients.version>3.1.0.redhat-00007</kafka-clients.version>
+    <postgres.version>42.4.1</postgres.version>
   </properties>
 
   <dependencyManagement>
@@ -38,9 +39,16 @@
         <version>${postgres.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.jboss.redhat-fuse</groupId>
-        <artifactId>fuse-springboot-bom</artifactId>
-        <version>${fuse.version}</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.camel.springboot</groupId>
+        <artifactId>camel-spring-boot-bom</artifactId>
+        <version>${camel.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -55,29 +63,39 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-tomcat</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-undertow</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-jdbc</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.camel</groupId>
+      <groupId>org.apache.camel.springboot</groupId>
       <artifactId>camel-spring-boot-starter</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.camel</groupId>
+      <groupId>org.apache.camel.springboot</groupId>
       <artifactId>camel-kafka-starter</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.camel</groupId>
+      <groupId>org.apache.camel.springboot</groupId>
       <artifactId>camel-sql-starter</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.camel</groupId>
+      <groupId>org.apache.camel.springboot</groupId>
       <artifactId>camel-jackson-starter</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.camel</groupId>
+      <groupId>org.apache.camel.springboot</groupId>
       <artifactId>camel-groovy-starter</artifactId>
     </dependency>
     <dependency>
@@ -101,9 +119,9 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.jboss.redhat-fuse</groupId>
+        <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>${fuse.version}</version>
+        <version>${spring-boot.version}</version>
         <executions>
           <execution>
             <goals>

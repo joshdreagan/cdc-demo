@@ -11,6 +11,10 @@ Install the Camel K operator and command line client.
 Edit the [dynamodb-cdc-processor-configmap.properties](./dynamodb-cdc-processor-configmap.properties) and [dynamodb-cdc-processor-secret.properties](./dynamodb-cdc-processor-secret.properties) files with your settings and credentials. Then create the ConfigMap & Secret.
 
 ```
+oc new-project camel-k
+
+# Make sure to install the Camel K Operator.
+
 oc create configmap dynamodb-cdc-processor-configmap --from-file=application.properties=./dynamodb-cdc-processor-configmap.properties -n camel-k
 oc create secret generic dynamodb-cdc-processor-secret --from-file=application.properties=./dynamodb-cdc-processor-secret.properties -n camel-k
 ```

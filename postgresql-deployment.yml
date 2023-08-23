@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: postgresql
+    app.kubernetes.io/component: postgresql
+    app.kubernetes.io/instance: postgresql
+  name: postgresql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: postgresql
+  template:
+    metadata:
+      labels:
+        deployment: postgresql
+    spec:
+      volumes:
+        - name: postgresql-data
+          persistentVolumeClaim:
+            claimName: postgresql-data
+        - name: postgresql-sql
+          configMap:
+            name: postgresql-sql
+            defaultMode: 420
+      containers:
+      - name: postgresql
+        resources: {}
+        env:
+        - name: POSTGRES_DB
+          value: sampledb
+        - name: POSTGRES_PASSWORD
+          value: Abcd1234!
+        - name: POSTGRES_USER
+          value: user1
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        ports:
+        - containerPort: 5432
+          protocol: TCP
+        volumeMounts:
+          - name: postgresql-data
+            mountPath: /var/lib/postgresql/data
+          - name: postgresql-sql
+            mountPath: /opt/workshop
+        image: >-
+          postgres:15
+        imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 25%
+    maxSurge: 25%
+revisionHistoryLimit: 10
+progressDeadlineSeconds: 600

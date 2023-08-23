@@ -29,11 +29,11 @@ import org.springframework.stereotype.Component;
 public class CamelConfiguration extends RouteBuilder {
 
   private static final Logger log = LoggerFactory.getLogger(CamelConfiguration.class);
-  
+
   @Override
   public void configure() throws Exception {
-    
-    from("kafka:mssql-server-linux.dbo.Orders")
+
+    from("kafka:server.earth.InternationalDB.dbo.Orders")
       .log(LoggingLevel.INFO, log, "Picked up message: [${body}]")
       .filter(body().isNull())
         .stop()
@@ -42,17 +42,17 @@ public class CamelConfiguration extends RouteBuilder {
       .setHeader("DebeziumOperation").groovy("request.body.payload?.op")
       .routingSlip().simple("direct:${header.DebeziumOperation}")
     ;
-    
+
     from("direct:c")
       .transform().groovy("request.body.payload?.after")
       .to(ExchangePattern.InOnly, "sql:insert into Orders values (:#${body['OrderId']}, :#${body['OrderType']}, :#${body['OrderItemName']}, :#${body['Quantity']}, :#${body['Price']}, :#${body['ShipmentAddress']}, :#${body['ZipCode']}, :#${body['OrderUser']})?dataSource=#dataSource")
     ;
-    
+
     from("direct:u")
       .transform().groovy("request.body.payload?.after")
       .to(ExchangePattern.InOnly, "sql:update Orders set OrderType = :#${body['OrderType']}, OrderItemName = :#${body['OrderItemName']}, Quantity = :#${body['Quantity']}, Price = :#${body['Price']}, ShipmentAddress = :#${body['ShipmentAddress']}, ZipCode = :#${body['ZipCode']}, OrderUser = :#${body['OrderUser']} where OrderId = :#${body['OrderId']}?dataSource=#dataSource")
     ;
-    
+
     from("direct:d")
       .transform().groovy("request.body.payload?.before")
       .to(ExchangePattern.InOnly, "sql:delete from Orders where OrderId = :#${body['OrderId']}?dataSource=#dataSource")

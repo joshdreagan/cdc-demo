@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: server
+    app.kubernetes.io/component: server
+    app.kubernetes.io/instance: server
+  name: server
+spec:
+  ports:
+  - name: 1433-tcp
+    port: 1433
+    protocol: TCP
+    targetPort: 1433
+  selector:
+    deployment: server

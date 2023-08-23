@@ -1,0 +1,64 @@
+﻿kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: server
+  labels:
+    app: server
+    app.kubernetes.io/component: server
+    app.kubernetes.io/instance: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: server
+  template:
+    metadata:
+      labels:
+        deployment: server
+    spec:
+      volumes:
+        - name: mssql-data
+          persistentVolumeClaim:
+            claimName: mssql-data
+        - name: mssql-sql
+          configMap:
+            name: mssql-sql
+            defaultMode: 420
+      containers:
+        - name: server
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          env:
+            - name: ACCEPT_EULA
+              value: 'Y'
+            - name: MSSQL_AGENT_ENABLED
+              value: 'true'
+            - name: MSSQL_PID
+              value: Developer
+            - name: SA_PASSWORD
+              value: Abcd1234
+          ports:
+            - containerPort: 1433
+              protocol: TCP
+          volumeMounts:
+            - name: mssql-data
+              mountPath: /var/opt/mssql
+            - name: mssql-sql
+              mountPath: /opt/workshop
+          terminationMessagePolicy: File
+          image: >-
+            mcr.microsoft.com/mssql/server:2022-latest
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext:
+        fsGroup: 10001
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

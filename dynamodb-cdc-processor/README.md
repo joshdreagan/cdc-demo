@@ -26,5 +26,6 @@ kamel run \
 --namespace camel-k \
 --config configmap:dynamodb-cdc-processor-configmap \
 --config secret:dynamodb-cdc-processor-secret \
+--name dynamodb-cdc-processor \
 ./DynamoDbCdcProcessor.java
 ```

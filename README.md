@@ -42,7 +42,7 @@ oc apply -f kafka-connect.yml -n streams
 oc apply -f kafka-connector-sqlserver-debezium.yml -n streams
 ```
 
-## Build/deploy the Fuse CDC Processor App
+## Build/deploy the Camel CDC Processor App
 
 ```
 pushd postgresql-cdc-processor
@@ -54,7 +54,7 @@ popd
 ## Monitor the CDC topic (optional)
 
 ```
-oc run -n streams kafka-consumer -ti --image=registry.redhat.io/amq-streams/kafka-34-rhel8:2.4.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic server.earth.InternationalDB.dbo.Orders --from-beginning
+oc run -n streams kafka-consumer -ti --image=registry.redhat.io/amq-streams/kafka-36-rhel8:2.6.0-4 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic server.earth.InternationalDB.dbo.Orders --from-beginning
 ```
 
 ## Make some changes to the MS SQL Server DB

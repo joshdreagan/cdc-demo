@@ -5,7 +5,7 @@ metadata:
   annotations:
     strimzi.io/use-connector-resources: "true"
 spec:
-  version: 3.4.0
+  version: 3.6.0
   replicas: 1
   bootstrapServers: my-cluster-kafka-bootstrap:9092
   build:
@@ -16,7 +16,7 @@ spec:
       - name: debezium-connector-sqlserver
         artifacts:
           - type: zip
-            url: "https://maven.repository.redhat.com/ga/io/debezium/debezium-connector-sqlserver/2.1.4.Final-redhat-00001/debezium-connector-sqlserver-2.1.4.Final-redhat-00001-plugin.zip"
+            url: "https://maven.repository.redhat.com/ga/io/debezium/debezium-connector-sqlserver/2.3.4.Final-redhat-00001/debezium-connector-sqlserver-2.3.4.Final-redhat-00001-plugin.zip"
   config:
     group.id: connect-cluster
     offset.storage.topic: connect-cluster-offsets

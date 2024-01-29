@@ -41,7 +41,7 @@ public class DynamoDbCdcProcessor extends RouteBuilder {
     .setHeader("CamelAwsDdbItem").groovy(
         "import software.amazon.awssdk.services.dynamodb.model.AttributeValue;\n" +
         "var map = [:];\n" +
-        "map['OrderId'] = AttributeValue.builder().n(request.body?.OrderId as String).build();\n" +
+        "map['OrderId'] = AttributeValue.builder().s(request.body?.OrderId as String).build();\n" +
         "map['OrderType'] = AttributeValue.builder().s(request.body?.OrderType).build();\n" +
         "map['OrderItemName'] = AttributeValue.builder().s(request.body?.OrderItemName).build();\n" +
         "map['Quantity'] = AttributeValue.builder().n(request.body?.Quantity as String).build();\n" +
@@ -59,7 +59,7 @@ public class DynamoDbCdcProcessor extends RouteBuilder {
       .setHeader("CamelAwsDdbKey").groovy(
         "import software.amazon.awssdk.services.dynamodb.model.AttributeValue;\n" +
         "var map = [:];\n" +
-        "map['OrderId'] = AttributeValue.builder().n(request.body?.OrderId as String).build();\n" +
+        "map['OrderId'] = AttributeValue.builder().s(request.body?.OrderId as String).build();\n" +
         "return map;"
       )
       .setHeader("CamelAwsDdbUpdateValues").groovy(
@@ -84,7 +84,7 @@ public class DynamoDbCdcProcessor extends RouteBuilder {
       .setHeader("CamelAwsDdbKey").groovy(
         "import software.amazon.awssdk.services.dynamodb.model.AttributeValue;\n" +
         "var map = [:];\n" +
-        "map['OrderId'] = AttributeValue.builder().n(request.body?.OrderId as String).build();\n" +
+        "map['OrderId'] = AttributeValue.builder().s(request.body?.OrderId as String).build();\n" +
         "return map;"
       )
       .to("aws2-ddb:{{dynamodb.tableName}}?operation=DeleteItem")
